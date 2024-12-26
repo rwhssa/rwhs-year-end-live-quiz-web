@@ -1,5 +1,7 @@
 import { io, Socket } from 'socket.io-client';
 import { quizStore } from '$lib/stores/quizStore';
+import { questionResultStore } from '$lib/stores/questionResultStore';
+import type { QuestionResult } from '$lib/types';
 
 const SOCKET_URL = 'http://localhost:3000';
 
@@ -49,6 +51,11 @@ export function initSocket(auth: SocketAuth) {
 		}
 	);
 
+	socket.on('question-result', (result: QuestionResult) => {
+		console.log('Received question result:', result);
+		questionResultStore.setResult(result);
+	});
+
 	socket.on('host-info', (info: HostInfo) => {
 		console.log('Received host info:', info);
 		quizStore.setHostInfo(info);
@@ -65,7 +72,7 @@ export function getSocket() {
 	return socket;
 }
 
-export function emitStatusChange(status: { is_active?: boolean; round?: number }): Promise<void> {
+export function emitStatusChange(status: { is_active?: boolean; round?: number | null }): Promise<void> {
 	return new Promise((resolve, reject) => {
 		if (!socket) {
 			reject(new Error('Socket not initialized'));

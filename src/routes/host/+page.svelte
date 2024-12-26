@@ -62,10 +62,43 @@
 		try {
 			await emitStatusChange({
 				is_active: true,
-				round: 1
+				round: null
 			});
 		} catch (error) {
 			console.error('Failed to start quiz:', error);
+			connectionError = '操作失敗，請重試';
+		} finally {
+			isLoading = false;
+		}
+	}
+
+	async function handleNextQuestion() {
+		isLoading = true;
+		try {
+			const nextRound = (currentRound ?? 0) + 1;
+			await emitStatusChange({
+				is_active: true,
+				round: nextRound
+			});
+		} catch (error) {
+			console.error('Failed to change question:', error);
+			connectionError = '操作失敗，請重試';
+		} finally {
+			isLoading = false;
+		}
+	}
+
+	async function handlePrevQuestion() {
+		if (!currentRound || currentRound <= 1) return;
+		
+		isLoading = true;
+		try {
+			await emitStatusChange({
+				is_active: true,
+				round: currentRound - 1
+			});
+		} catch (error) {
+			console.error('Failed to change question:', error);
 			connectionError = '操作失敗，請重試';
 		} finally {
 			isLoading = false;
@@ -141,6 +174,24 @@
 				{/if}
 				開始遊戲
 			</button>
+			
+			{#if quizStatus.is_active}
+				<button
+					class="btn"
+					onclick={handlePrevQuestion}
+					disabled={isLoading || !currentRound || currentRound <= 1}
+				>
+					上一題
+				</button>
+				<button
+					class="btn"
+					onclick={handleNextQuestion}
+					disabled={isLoading}
+				>
+					{currentRound ? '下一題' : '開始第一題'}
+				</button>
+			{/if}
+			
 			<button
 				class="btn btn-error"
 				onclick={handleStopQuiz}

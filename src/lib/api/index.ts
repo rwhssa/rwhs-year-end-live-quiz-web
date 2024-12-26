@@ -2,7 +2,7 @@ const API_BASE_URL = 'http://localhost:3000/api';
 
 const DEFAULT_FETCH_OPTIONS = {
 	headers: {
-		'Content-Type': 'application/json',
+		'Content-Type': 'application/json'
 	}
 };
 
@@ -38,6 +38,7 @@ export interface CreateQuizBody {
 
 export interface Question extends CreateQuizBody {
 	id: number;
+	options: QuestionOption[] & { id: number }[];
 }
 
 export async function getQuestions(): Promise<Question[]> {
@@ -72,4 +73,27 @@ export async function getQuestionByRound(round: number): Promise<Question> {
 	}
 
 	return response.json();
+}
+
+export interface SubmitAnswerBody {
+	correct_option_ids: number[];
+}
+
+export async function submitAnswer(
+	questionId: number,
+	data: SubmitAnswerBody,
+	token: string
+): Promise<void> {
+	const response = await fetch(`${API_BASE_URL}/question/${questionId}/answer`, {
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${token}`
+		},
+		method: 'POST',
+		body: JSON.stringify(data)
+	});
+
+	if (!response.ok) {
+		throw new Error('提交答案失敗');
+	}
 }

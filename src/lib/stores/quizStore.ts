@@ -1,11 +1,5 @@
 import { writable } from 'svelte/store';
-
-export type QuizStatus = {
-	is_active?: boolean;
-	round?: number;
-	num_students?: number;
-	remaining_time?: number;
-};
+import type { QuizStatus } from '$lib/types';
 
 function createQuizStore() {
 	const { subscribe, set, update } = writable<QuizStatus | null>(null);
