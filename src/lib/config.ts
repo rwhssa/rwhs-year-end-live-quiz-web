@@ -4,8 +4,8 @@ const DEV = {
 };
 
 const PROD = {
-	API_BASE_URL: 'http://rwsa-api.lipoic.org/api',
-	SOCKET_URL: 'http://rwsa-api.lipoic.org'
+	API_BASE_URL: 'https://rwsa-api.lipoic.org/api',
+	SOCKET_URL: 'https://rwsa-api.lipoic.org'
 };
 
 export const config = import.meta.env.DEV ? DEV : PROD;
