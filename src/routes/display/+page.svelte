@@ -83,7 +83,6 @@
 			class="fixed right-12 top-12 z-50 flex flex-col items-center gap-6 bg-base-100/80 p-6 backdrop-blur"
 		>
 			<QRCode url={config.SITE_URL} size={300} />
-			<p class="text-2xl">{config.SITE_URL}</p>
 		</div>
 
 		{#if !quizStatus}
