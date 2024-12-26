@@ -9,6 +9,7 @@
 	import Leaderboard from '$lib/components/Leaderboard.svelte';
 	import LoadingScreen from '$lib/components/LoadingScreen.svelte';
 	import WaitingRoom from '$lib/components/WaitingRoom.svelte';
+	import { config } from '$lib/config';
 
 	const token = $derived($authStore);
 	const quizStatus = $derived($quizStore);
@@ -88,7 +89,7 @@
 		}
 
 		if (!$authStore) {
-			goto('/');
+			goto(config.BASE_PATH + '/');
 			return;
 		}
 

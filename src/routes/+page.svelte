@@ -3,6 +3,7 @@
 	import { authStore } from '$lib/stores/authStore';
 	import { createStudentAccount } from '$lib/api';
 	import { onMount } from 'svelte';
+	import { config } from '$lib/config';
 
 	let selectedClass = $state<string>();
 	let selectedGrade = $state<string>();
@@ -45,7 +46,7 @@
 			});
 
 			authStore.setToken(token);
-			goto('/quiz');
+			goto(config.BASE_PATH + '/quiz');
 		} catch (error) {
 			alert('發生錯誤，請重試');
 		} finally {
@@ -59,7 +60,7 @@
 		}
 
 		if ($authStore) {
-			goto('/quiz');
+			goto(config.BASE_PATH + '/quiz');
 		}
 	});
 </script>
