@@ -1,4 +1,6 @@
-const API_BASE_URL = 'http://178.128.21.62:3000/api';
+import { config } from '$lib/config';
+
+const API_BASE_URL = config.API_BASE_URL;
 
 const DEFAULT_FETCH_OPTIONS = {
 	headers: {

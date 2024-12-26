@@ -1,9 +1,10 @@
+import { config } from '$lib/config';
 import { io, Socket } from 'socket.io-client';
 import { quizStore } from '$lib/stores/quizStore';
 import { questionResultStore } from '$lib/stores/questionResultStore';
 import type { QuestionResult } from '$lib/types';
 
-const SOCKET_URL = 'http://178.128.21.62:3000';
+const SOCKET_URL = config.SOCKET_URL;
 
 let socket: Socket;
 
