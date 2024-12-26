@@ -3,7 +3,7 @@ import { quizStore } from '$lib/stores/quizStore';
 import { questionResultStore } from '$lib/stores/questionResultStore';
 import type { QuestionResult } from '$lib/types';
 
-const SOCKET_URL = 'http://localhost:3000';
+const SOCKET_URL = 'http://178.128.21.62:3000';
 
 let socket: Socket;
 
@@ -72,7 +72,10 @@ export function getSocket() {
 	return socket;
 }
 
-export function emitStatusChange(status: { is_active?: boolean; round?: number | null }): Promise<void> {
+export function emitStatusChange(status: {
+	is_active?: boolean;
+	round?: number | null;
+}): Promise<void> {
 	return new Promise((resolve, reject) => {
 		if (!socket) {
 			reject(new Error('Socket not initialized'));
