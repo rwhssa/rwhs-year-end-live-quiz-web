@@ -71,9 +71,10 @@
 			</h3>
 			<div class="relative flex h-[200px] items-end justify-center gap-4">
 				{#each result.top_3_classes as classInfo, index (classInfo.name)}
+					{@const displayOrder = [1, 0, 2][index]}
 					<div
 						class="flex flex-col items-center"
-						style="height: {[80, 100, 60][index]}%"
+						style="height: {[80, 100, 60][displayOrder]}%"
 						animate:flip={{ duration: 400 }}
 					>
 						<div class="flex flex-col items-center">
@@ -84,11 +85,11 @@
 						</div>
 						<div
 							class="{positionColors[
-								index
+								displayOrder
 							]} w-32 flex-grow rounded-t-lg transition-all duration-500"
 						>
 							<div class="pt-4 text-center font-bold text-base-100">
-								第{index + 1}名
+								第{displayOrder + 1}名
 							</div>
 						</div>
 					</div>
