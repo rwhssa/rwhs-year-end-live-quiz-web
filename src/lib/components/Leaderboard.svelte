@@ -3,6 +3,7 @@
 	import { getQuestionByRound } from '$lib/api';
 	import type { Question } from '$lib/api';
 	import { flip } from 'svelte/animate';
+	import type { SchoolClass } from '$lib/types';
 
 	const props = $props<{ isFinalLeaderboard?: boolean }>();
 	const isFinalLeaderboard = $derived(props.isFinalLeaderboard ?? false);
@@ -28,6 +29,11 @@
 		'bg-[#C0C0C0]', // 銀牌
 		'bg-[#CD7F32]' // 銅牌
 	];
+
+	// 新增：對分數進行排序的函數
+	function getSortedClasses(classes: SchoolClass[]) {
+		return [...classes].sort((a, b) => b.score - a.score);
+	}
 </script>
 
 <div class="card bg-base-200 p-6">
@@ -70,28 +76,54 @@
 				{isFinalLeaderboard ? '' : '目前排名'}
 			</h3>
 			<div class="relative flex h-[200px] items-end justify-center gap-4">
-				{#each result.top_3_classes as classInfo, index (classInfo.name)}
-					{@const displayOrder = [1, 0, 2][index]}
-					<div
-						class="flex flex-col items-center"
-						style="height: {[80, 100, 60][displayOrder]}%"
-						animate:flip={{ duration: 400 }}
-					>
-						<div class="flex flex-col items-center">
-							<div class="mb-2 text-2xl font-bold">
-								{classInfo.name}班
+				{#each getSortedClasses(result.top_3_classes) as classInfo, index (classInfo.name)}
+					<div animate:flip={{ duration: 400 }} class="contents">
+						{#if index === 0}
+							<!-- 第一名（中間） -->
+							<div class="order-2 flex flex-col items-center" style="height: 100%">
+								<div class="flex flex-col items-center">
+									<div class="mb-2 text-2xl font-bold">
+										{classInfo.name}班
+									</div>
+									<div class="text-xl">{classInfo.score}分</div>
+								</div>
+								<div
+									class="{positionColors[0]} w-32 flex-grow rounded-t-lg transition-all duration-500"
+								>
+									<div class="pt-4 text-center font-bold text-base-100">第1名</div>
+								</div>
 							</div>
-							<div class="text-xl">{classInfo.score}分</div>
-						</div>
-						<div
-							class="{positionColors[
-								displayOrder
-							]} w-32 flex-grow rounded-t-lg transition-all duration-500"
-						>
-							<div class="pt-4 text-center font-bold text-base-100">
-								第{displayOrder + 1}名
+						{:else if index === 1}
+							<!-- 第二名（左邊） -->
+							<div class="order-1 flex flex-col items-center" style="height: 80%">
+								<div class="flex flex-col items-center">
+									<div class="mb-2 text-2xl font-bold">
+										{classInfo.name}班
+									</div>
+									<div class="text-xl">{classInfo.score}分</div>
+								</div>
+								<div
+									class="{positionColors[1]} w-32 flex-grow rounded-t-lg transition-all duration-500"
+								>
+									<div class="pt-4 text-center font-bold text-base-100">第2名</div>
+								</div>
 							</div>
-						</div>
+						{:else}
+							<!-- 第三名（右邊） -->
+							<div class="order-3 flex flex-col items-center" style="height: 60%">
+								<div class="flex flex-col items-center">
+									<div class="mb-2 text-2xl font-bold">
+										{classInfo.name}班
+									</div>
+									<div class="text-xl">{classInfo.score}分</div>
+								</div>
+								<div
+									class="{positionColors[2]} w-32 flex-grow rounded-t-lg transition-all duration-500"
+								>
+									<div class="pt-4 text-center font-bold text-base-100">第3名</div>
+								</div>
+							</div>
+						{/if}
 					</div>
 				{/each}
 			</div>
