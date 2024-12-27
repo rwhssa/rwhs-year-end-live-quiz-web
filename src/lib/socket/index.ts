@@ -85,19 +85,17 @@ export function emitStatusChange(status: {
 
 		console.log('Emitting status change:', status);
 
-		// // const timeout = setTimeout(() => {
-		// // 	reject(new Error('Status change timeout'));
-		// // }, 5000);
+		const timeout = setTimeout(() => {
+			reject(new Error('Status change timeout'));
+		}, 5000);
 
-		// socket.emit('status-change', status, (response: { success: boolean; error?: string }) => {
-		// 	clearTimeout(timeout);
-		// 	if (response.success) {
-		// 		resolve();
-		// 	} else {
-		// 		reject(new Error(response.error || 'Failed to change status'));
-		// 	}
-		// });
-		socket.emit('status-change', status);
-		resolve();
+		socket.emit('status-change', status, (response: { success: boolean; error?: string }) => {
+			clearTimeout(timeout);
+			if (response.success) {
+				resolve();
+			} else {
+				reject(new Error(response.error || 'Failed to change status'));
+			}
+		});
 	});
 }
