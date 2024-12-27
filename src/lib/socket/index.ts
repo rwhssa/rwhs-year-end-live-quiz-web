@@ -98,5 +98,6 @@ export function emitStatusChange(status: {
 		// 	}
 		// });
 		socket.emit('status-change', status);
+		resolve();
 	});
 }
